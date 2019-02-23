@@ -33,6 +33,13 @@ public class UserRepository {
             .singleOrEmpty();
     }
 
+    public Mono<User> findByAccountNumber(String number) {
+        return Flux.fromStream(userRepository.entrySet().stream())
+            .map(Map.Entry::getValue)
+            .filter(user -> user.getAccount().getNumber().equals(number))
+            .singleOrEmpty();
+    }
+
     private Flux<User> initTestUsers(){
         return Flux.<User, User>generate(
             User::new,
@@ -41,7 +48,8 @@ public class UserRepository {
                 userRepository.put(user.getId(), user);
                 sink.next(user);
 
-                logger.info("Generated test user with login: " + user.getLogin() + " and password: " + user.getPassword());
+                logger.info("Generated test user with login: " + user.getLogin() + " password: " + user.getPassword()
+                    + " and account number: " + user.getAccount().getNumber());
 
                 if (userRepository.size() == USERS)
                     sink.complete();

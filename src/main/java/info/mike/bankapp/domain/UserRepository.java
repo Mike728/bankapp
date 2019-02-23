@@ -15,6 +15,7 @@ public class UserRepository {
     private Logger logger = LoggerFactory.getLogger(UserRepository.class);
 
     private final Map<String, User> userRepository;
+    private final int USERS = 2;
 
     public UserRepository() {
         this.userRepository = new HashMap<>();
@@ -32,12 +33,20 @@ public class UserRepository {
             .singleOrEmpty();
     }
 
-    private Mono<User> initTestUsers(){
-        return Mono.create(sink -> {
-            User user = new User();
-            User put = userRepository.put(user.getId(), user);
-            logger.info("Generated test user with login: " + user.getLogin() + " and password: " + user.getPassword());
-            sink.success(put);
-        });
+    private Flux<User> initTestUsers(){
+        return Flux.<User, User>generate(
+            User::new,
+            (state, sink) -> {
+                User user = new User();
+                userRepository.put(user.getId(), user);
+                sink.next(user);
+
+                logger.info("Generated test user with login: " + user.getLogin() + " and password: " + user.getPassword());
+
+                if (userRepository.size() == USERS)
+                    sink.complete();
+
+                return user;
+            });
     }
 }

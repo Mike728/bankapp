@@ -12,6 +12,7 @@ public class User {
 
     public User() {
         this.id = UUID.randomUUID().toString();
+        this.account = new Account();
         generateLoginAndPassword();
     }
 

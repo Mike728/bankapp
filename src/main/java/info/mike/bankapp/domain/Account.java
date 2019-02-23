@@ -10,6 +10,13 @@ public class Account {
     private String number;
     private LocalDateTime updateDate;
 
+    public Account() {
+        this.balance = BigDecimal.ZERO;
+        this.history = new History();
+        this.number = "1234";
+        this.updateDate = LocalDateTime.now();
+    }
+
     public BigDecimal getBalance() {
         return balance;
     }

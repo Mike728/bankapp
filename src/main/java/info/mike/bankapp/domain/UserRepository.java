@@ -15,7 +15,7 @@ public class UserRepository {
     private Logger logger = LoggerFactory.getLogger(UserRepository.class);
 
     private final Map<String, User> userRepository;
-    private final int USERS = 2;
+    private final int TEST_USERS = 2;
 
     public UserRepository() {
         this.userRepository = new HashMap<>();
@@ -51,7 +51,7 @@ public class UserRepository {
                 logger.info("Generated test user with login: " + user.getLogin() + " password: " + user.getPassword()
                     + " and account number: " + user.getAccount().getNumber());
 
-                if (userRepository.size() == USERS)
+                if (userRepository.size() == TEST_USERS)
                     sink.complete();
 
                 return user;

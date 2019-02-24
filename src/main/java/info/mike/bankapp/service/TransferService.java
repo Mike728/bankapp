@@ -22,24 +22,29 @@ public class TransferService {
         this.userRepository = userRepository;
     }
 
-    public Mono<BigDecimal> makeTransfer(TransferRequest transferRequest, String token){
+    public Mono<BigDecimal> validateTransfer(TransferRequest transferRequest, String submitterLogin, String submitterNumberAccount){
+        BigDecimal amount = transferRequest.getAmount();
+
+        return userRepository.findByLogin(submitterLogin)
+            .flatMap(user -> validateThatUserHaveEnoughMoney(user, amount))
+            .then(makeTransfer(transferRequest, submitterLogin, submitterNumberAccount));
+    }
+
+    private Mono<BigDecimal> makeTransfer(TransferRequest transferRequest, String submitterLogin, String submitterNumberAccount) {
         String targetAccountNumber = transferRequest.getTo();
         BigDecimal amount = transferRequest.getAmount();
 
         return userRepository.findByAccountNumber(targetAccountNumber)
-            .flatMap(user -> validateThatUserHaveEnoughMoney(user, transferRequest))
-            .flatMap(user -> user.getAccount().transferMoney(amount))
-            .then(subtractMoney(token, amount));
+            .flatMap(user -> user.getAccount().addMoneyToReceiver(transferRequest, submitterNumberAccount))
+            .then(subtractMoneyFromSubmitter(submitterLogin, transferRequest, submitterNumberAccount));
     }
 
-    private Mono<BigDecimal> subtractMoney(String token, BigDecimal amount) {
-        return userRepository.findByLogin(TokenService.getEmailFromToken(token))
-            .flatMap(user -> user.getAccount().subtractAmount(amount));
+    private Mono<BigDecimal> subtractMoneyFromSubmitter(String submitterLogin, TransferRequest transferRequest, String submitterNumberAccount) {
+        return userRepository.findByLogin(submitterLogin)
+            .flatMap(user -> user.getAccount().subtractMoney(transferRequest, submitterNumberAccount));
     }
 
-    private Mono<User> validateThatUserHaveEnoughMoney(User user, TransferRequest transferRequest){
-        BigDecimal amount = transferRequest.getAmount();
-
+    private Mono<User> validateThatUserHaveEnoughMoney(User user, BigDecimal amount){
         return Mono.<User>create(sink -> {
             int comparision = user.getAccount().getBalance().compareTo(amount);
             if(comparision > -1) {

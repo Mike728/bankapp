@@ -36,7 +36,7 @@ public class TokenService {
         return new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), token, authentication.getAuthorities());
     }
 
-    public static String getEmailFromToken(String token){
+    public static String getLoginFromToken(String token){
         if(token != null && Strings.isNotEmpty(token)) {
             token = token.replace("Bearer", "");
             return Jwts.parser()

@@ -1,5 +1,6 @@
 package info.mike.bankapp.domain;
 
+import info.mike.bankapp.web.TransferRequest;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
@@ -36,13 +37,15 @@ public class Account {
         return updateDate;
     }
 
-    public Mono<BigDecimal> transferMoney(BigDecimal amount){
-        this.balance = balance.add(amount);
+    public Mono<BigDecimal> addMoneyToReceiver(TransferRequest transferRequest, String submitterNumberAccount){
+        this.balance = balance.add(transferRequest.getAmount());
+        this.history.addEntryToHistory(transferRequest, submitterNumberAccount);
         return Mono.just(balance);
     }
 
-    public Mono<BigDecimal> subtractAmount(BigDecimal amount){
-        this.balance = balance.subtract(amount);
+    public Mono<BigDecimal> subtractMoney(TransferRequest transferRequest, String submitterNumberAccount){
+        this.balance = balance.subtract(transferRequest.getAmount());
+        this.history.addEntryToHistory(transferRequest, submitterNumberAccount);
         return Mono.just(balance);
     }
 }

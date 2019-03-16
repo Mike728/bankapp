@@ -19,7 +19,7 @@ public class History {
         return transfers;
     }
 
-    public void addEntryToHistory(TransferRequest transferRequest, String accountNumber){
-        this.transfers.add(new Transfer(transferRequest, accountNumber));
+    public void addEntryToHistory(TransferRequest transferRequest, String accountNumber, OperationType operationType){
+        this.transfers.add(new Transfer(transferRequest, accountNumber, operationType));
     }
 }

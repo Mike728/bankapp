@@ -15,9 +15,9 @@ public class Account {
     private LocalDateTime updateDate;
 
     public Account() {
-        this.balance = BigDecimal.TEN;
+        this.balance = BigDecimal.valueOf(2000L);
         this.history = new History();
-        this.number = String.valueOf(ThreadLocalRandom.current().nextInt(1000, 9999));
+        this.number = String.valueOf(ThreadLocalRandom.current().nextInt(10000000, 99999999));
         this.updateDate = LocalDateTime.now();
     }
 
@@ -39,13 +39,13 @@ public class Account {
 
     public Mono<BigDecimal> addMoneyToReceiver(TransferRequest transferRequest, String submitterNumberAccount){
         this.balance = balance.add(transferRequest.getAmount());
-        this.history.addEntryToHistory(transferRequest, submitterNumberAccount);
+        this.history.addEntryToHistory(transferRequest, submitterNumberAccount, OperationType.ADDITION);
         return Mono.just(balance);
     }
 
     public Mono<BigDecimal> subtractMoney(TransferRequest transferRequest, String submitterNumberAccount){
         this.balance = balance.subtract(transferRequest.getAmount());
-        this.history.addEntryToHistory(transferRequest, submitterNumberAccount);
+        this.history.addEntryToHistory(transferRequest, submitterNumberAccount, OperationType.SUBTRACTION);
         return Mono.just(balance);
     }
 }

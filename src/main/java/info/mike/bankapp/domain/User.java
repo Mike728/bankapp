@@ -33,10 +33,10 @@ public class User {
     }
 
     private void generateLoginAndPassword(){
-        int login = ThreadLocalRandom.current().nextInt(100000, 999999);
+        int login = ThreadLocalRandom.current().nextInt(10000000, 99999999);
         this.login = String.valueOf(login);
 
-        int password = ThreadLocalRandom.current().nextInt(100000, 999999);
+        int password = ThreadLocalRandom.current().nextInt(10000000, 99999999);
         this.password = String.valueOf(password);
     }
 }

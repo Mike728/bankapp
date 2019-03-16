@@ -1,10 +1,10 @@
 # BankApp
 
-> Backend aplikacji. Wymaga zainstalowania [Java 8](https://www.java.com/pl/download/) (środowisko uruchomieniowe) oraz [gradle](https://gradle.org/install/) (pakiet manager dla Java).
+Backend aplikacji. Wymaga zainstalowania [Java 8](https://www.java.com/pl/download/) (środowisko uruchomieniowe) oraz [gradle](https://gradle.org/install/) (pakiet manager dla Java).
 Użyte technologie:
-> - Java 8 (https://vuejs.org/)
-> - Spring WebFlux (https://spring.io/blog/2016/07/28/reactive-programming-with-spring-5-0-m1)
-> - JSON Web Token (https://jwt.io/)
+- Java 8 (https://vuejs.org/)
+- Spring WebFlux (https://spring.io/blog/2016/07/28/reactive-programming-with-spring-5-0-m1)
+- JSON Web Token (https://jwt.io/)
 
 ## Uruchomienie
 
